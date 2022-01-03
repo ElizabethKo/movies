@@ -5,74 +5,70 @@
         <div class="movie_info">
           <Stars/>
           <div class="rating">
-            <p>{{ movie.rating }}</p>
+            <p>{{rating}}</p>
           </div>
-          <p class="genres" >{{ movie.genres.join(" ").toString() }}</p>
+          <p class="genres">{{ movieGenres}}</p>
         </div>
         <div>
-          <div class='open-about' :class='{show: active}' @click='$emit("closeAbout")'>
-          </div>
-          <div class='open' :class='{show: active}'>
-            <div class='open_close' @click='$emit("closeAbout")'>
-              back to catalog
-            </div>
-            {{ movie.description_full }}
-          </div>
           <img class="img" :src="movie.large_cover_image" @error="defaultImage" alt="movie poster">
         </div>
       </div>
-
+      <h1 class="title">{{movie.title}}</h1>
+      <p class="year">{{movie.year }}</p>
       <div class="">
-        <button type="button" :value="movie.id" @click="$emit('about-movie', movie)" class="more">more</button>
-        <h1 class="title">{{ movie.title }}</h1>
-        <p class="year">{{ movie.year }}</p>
+        <movie-description
+            :id="'movie_description_'+movie.id"
+            :movie="movie"
+            :isDescriptionActive="description.isActive"
+            v-on:closeAbout="closeAbout"
+        >
+        </movie-description>
+        <button type="button" :value="movie.id" @click="moreToggle" class="more">{{description.isActive ? 'HIDE' : 'MORE'}}
+        </button>
       </div>
-
     </div>
-
   </div>
 </template>
 
 <script>
-
-import Stars from "@/components/RatingStars";
-
+import Stars from "./RatingStars";
+import MovieDescription from "./MovieDescription";
 export default {
   name: "GalleryMovies",
-  components: {Stars},
+  components: { Stars, MovieDescription},
   props: {
     movie: {
-      type: Object,
-      default: function () {
-        return {
-          genres: []
-        }
-      }
-    },
-    active: {
-      type: Boolean
-    },
+      id: Number,
+      title: String,
+      year: Number,
+      genres: Array,
+      description_full: String,
+      large_cover_image: String,
+      rating: Number,
+      active: Boolean
+    }
   },
-  // movie: {
-  //   type: Object,
-  //   default: function () {
-  //     return {
-  //       id: 1,
-  //       title: '',
-  //       year: '',
-  //       genres: [],
-  //       description_full: '',
-  //       large_cover_image: '',
-  //       rating: '',
-  //     }
-  //   }
-  // },
+  data() {
+    return {
+      movieGenres: this.movie.genres ? this.movie.genres.join(" ") : "No genres" ,
+      rating: this.movie.rating ? this.movie.rating : "No rating",
+      description: {
+        type: Boolean,
+        isActive: false,
+      }
+    }
+  },
   methods: {
     defaultImage(event) {
-      event.target.src = require('./assets/icons/no-icon.png')
+      event.target.src = require('../assets/icons/no-icon.png')
     },
-  },
-  computed: {}
+    moreToggle() {
+      this.description.isActive = !this.description.isActive;
+    },
+    closeAbout() {
+      this.description.isActive = false
+    }
+  }
 }
 </script>
 
@@ -128,13 +124,15 @@ export default {
 }
 
 @media (max-width: 900px) {
-  .film_block {
+  .film_block,
+  .more {
     width: 33.33333%;
   }
 }
 
 @media (max-width: 650px) {
-  .film_block {
+  .film_block,
+  .more{
     width: 50%;
   }
 }
@@ -146,16 +144,24 @@ export default {
   }
 }
 
+@media (max-width: 450px) {
+  .more {
+    width: 100%;
+    padding: 25px 55px;
+  }
+}
+
 .title {
   color: #999999;
   font-weight: bold;
-  letter-spacing: 2px;
+  margin: 5px;
+  font-size: 15px;
 }
 
 .year {
   color: #999999;
   font-weight: normal;
-  letter-spacing: 2px;
+  margin: 5px;
 }
 
 .rating {
@@ -190,52 +196,7 @@ export default {
 }
 
 
-.open-about {
-  width: 100%;
-  height: 100vh;
-  background-color: rgba(124, 124, 124, 0.55);
-  z-index: 100;
-  position: fixed;
-  bottom: 0;
-  top: 0;
-  display: none;
-  transition: display 1s;
 
-  &.show {
-    display: block;
-  }
-}
-
-.open {
-  width: 100%;
-  height: 100vh;
-  background-color: yellowgreen;
-  position: fixed;
-  bottom: 0;
-  top: -105vw;
-  padding: 15px;
-  transition: top .5s;
-  z-index: 101;
-  overflow-y: scroll;
-
-  &.show {
-    top: 0;
-  }
-}
-
-.open_close {
-  font-size: 16px;
-  padding: 15px;
-  border-radius: 20px;
-  right: 10px;
-  float: right;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #42b983;
-
-  }
-}
 
 
 </style>

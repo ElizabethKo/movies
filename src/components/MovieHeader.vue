@@ -1,13 +1,19 @@
 <template>
-  <div class="header">
-    <p>list of movies</p>
-
+  <div>
+    <div class="header">
+      <snow-snow/>
+      <p>movies</p>
+      <img class="hat" src="../assets/icons/icons8-santa-hat-64.png" alt="hat">
+    </div>
   </div>
 </template>
 
 <script>
+
+import SnowSnow from "./Snow";
 export default {
   name: "MovieHeader",
+  components: {SnowSnow},
 }
 </script>
 
@@ -33,5 +39,9 @@ export default {
   .header{
     padding: 15px 0;
   }
+}
+.hat{
+  width: 50px;
+  height: 50px;
 }
 </style>
