@@ -1,4 +1,10 @@
 # movies
+gallery with movies;
+some information about movie; pagination;
+
+<li>Vue 3</li>
+<li>axios</li>
+<li>SCSS</li>
 
 
 ## Project setup
