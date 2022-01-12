@@ -3,10 +3,10 @@
     <div class="">
       <div class="movie_img ">
         <div class="movie_info">
-          <Stars/>
-          <div class="rating">
-            <p>{{rating}}</p>
-          </div>
+          <Stars
+              :movie="movie"
+          ></Stars>
+
           <p class="genres">{{ movieGenres}}</p>
         </div>
         <div>
@@ -51,11 +51,12 @@ export default {
   data() {
     return {
       movieGenres: this.movie.genres ? this.movie.genres.join(" ") : "No genres" ,
-      rating: this.movie.rating ? this.movie.rating : "No rating",
+      // rating: this.movie.rating ? this.movie.rating : "No rating",
       description: {
         type: Boolean,
         isActive: false,
-      }
+      },
+      rating_active: Boolean
     }
   },
   methods: {
@@ -155,7 +156,7 @@ export default {
   color: #999999;
   font-weight: bold;
   margin: 5px;
-  font-size: 15px;
+  font-size: 13px;
 }
 
 .year {
@@ -182,7 +183,7 @@ export default {
 }
 
 .more {
-  width: 250px;
+  width: clamp(250px, 50%, 280px);
   height: 35px;
   background: darkseagreen;
   border-radius: 5px;
